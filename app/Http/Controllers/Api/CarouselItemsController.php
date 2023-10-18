@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CarouselItemsRequest;
 use App\Models\CarouselItems;
+use Egulias\EmailValidator\Parser\FoldingWhiteSpace;
 use Illuminate\Http\Request;
 
 class CarouselItemsController extends Controller
@@ -23,6 +25,7 @@ class CarouselItemsController extends Controller
     public function store(CarouselItemsRequest $request)
     {
         $validated = $request->validated();
+
         $carouseltitem = CarouselItems::create($validated);
 
         return $carouseltitem;
@@ -41,9 +44,13 @@ class CarouselItemsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CarouselItemsRequest $request, string $id)
     {
-        //
+        $validated = $request->validated();
+        $carouseltitem = CarouselItems::findOrFail($id);
+        $carouseltitem->update($validated);
+
+        return $carouseltitem;
     }
 
     /**
