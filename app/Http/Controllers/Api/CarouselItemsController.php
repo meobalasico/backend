@@ -3,11 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Http\Controllers\UserRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CarouselItemsRequest;
 use App\Models\CarouselItems;
+use App\Models\User;
 use Egulias\EmailValidator\Parser\FoldingWhiteSpace;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+use function Laravel\Prompts\password;
 
 class CarouselItemsController extends Controller
 {
@@ -22,14 +27,27 @@ class CarouselItemsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CarouselItemsRequest $request)
+    // public function store(CarouselItemsRequest $request)
+    // {
+    //     $validated = $request->validated();
+
+    //     $carouselitem = CarouselItems::create($validated);
+
+    //     return $carouselitem;
+    // }
+
+    public function store(UserRequest $request)
     {
         $validated = $request->validated();
 
-        $carouseltitem = CarouselItems::create($validated);
+        $validated['password'] = Hash::make($validated['password']);
 
-        return $carouseltitem;
+        $user = User::create($validated);
+
+        return $user;
+
     }
+    // }
 
     /**
      * Display the specified resource.
@@ -47,6 +65,7 @@ class CarouselItemsController extends Controller
     public function update(CarouselItemsRequest $request, string $id)
     {
         $validated = $request->validated();
+
         $carouseltitem = CarouselItems::findOrFail($id);
         $carouseltitem->update($validated);
 
@@ -64,4 +83,6 @@ class CarouselItemsController extends Controller
         return $carouselItems;
 
     }
+
+
 }

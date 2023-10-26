@@ -32,4 +32,15 @@ return new class extends Migration {
     {
         Schema::dropIfExists('carousel_items');
     }
+
+    // public function rules(): array
+    // {
+    //     return [
+    //         'name' => 'required' | 'string' | 'max:255',
+    //         'email' => 'required' | 'string' | 'email' | 'max:255',
+    //         'password' => 'required' | 'min:8'
+    //     ];
+    // }
+
+
 };

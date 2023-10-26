@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Controllers\API\UserRequest;
+
 
 class CarouselItemsRequest extends FormRequest
 {
@@ -19,13 +21,16 @@ class CarouselItemsRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            'carousel_name' => 'string|max:255',
-            'image_path' => 'required|max:255',
-            'description' => 'string|nullable|max:255',
-            'user_id' => 'required|integer',
-        ];
-    }
+    // public function rules(): array
+    // {
+    //     return [
+    //         'carousel_name' => 'string|max:255',
+    //         'image_path' => 'required|max:255',
+    //         'description' => 'string|nullable|max:255',
+    //         'user_id' => 'required|integer',
+    //     ];
+    // }
+
+
+
 }
