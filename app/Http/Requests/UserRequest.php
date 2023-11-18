@@ -37,7 +37,13 @@ class UserRequest extends FormRequest
                 "email" => 'required|string|email|max:255',
 
             ];
+        } else if (request()->routeIs('user.image') || request()->routeIs('profile.image')) {
+            return [
+                "image" => 'required|image|mimes:jpg,bmp,png|max:2048',
+
+            ];
         }
+
 
     }
 }
