@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
+
 
 class AuthController extends Controller
 {
@@ -33,11 +34,19 @@ class AuthController extends Controller
     }
 
     /**
-     * Login using the specified resource.
+     * Logout using the specified resource.
      */
-    public function logout()
+    public function logout(Request $request)
     {
-        return false;
+        // Revoke the user's tokens
+        $request->user()->tokens()->delete();
+
+
+        $response = [
+            'message' => 'Nawala na to imong token gi biyaan naka'
+        ];
+
+        return $response;
     }
 
 }
