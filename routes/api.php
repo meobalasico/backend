@@ -26,27 +26,36 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout');
 });
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+
+Route::middleware(['auth:sanctum',])->group(function () {
+    Route::controller(CarouselItemsController::class)->group(function () {
+
+        Route::get('/carousel', 'index');
+        Route::get('/carousel/{id}', 'show');
+        Route::post('/carousel', 'store');
+        Route::put('/carousel/{id}', 'update');
+        Route::delete('/carousel/{id}', 'destroy');
+
+
+    });
+    Route::controller(UserController::class)->group(function () {
+
+        Route::get('/user', 'index');
+        Route::get('/user/{id}', 'show');
+        Route::put('/user/{id}', 'update')->name('users.update');
+        Route::post('/user', 'store')->name('users.store');
+        Route::put('/user/email/{id}', 'email')->name('user.email');
+        Route::delete('/user/{id}', 'destroy');
+
+    });
+
+
+
+
+
 });
 
-
-Route::controller(CarouselItemsController::class)->group(function () {
-
-    Route::get('/carousel', 'index');
-    Route::get('/carousel/{id}', 'show');
-    Route::post('/carousel', 'store');
-    Route::put('/carousel/{id}', 'update');
-    Route::delete('/carousel/{id}', 'destroy');
-
-});
-
-// Route::get('/user', [UserController::class, 'index']);
-// Route::get('/user/{id}', [UserController::class, 'show']);
-// Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
-// Route::post('/user', [UserController::class, 'store'])->name('users.store');
-// Route::put('/user/email/{id}', [UserController::class, 'email'])->name('user.email');
-// Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
 
 // Route::get('/message', [MessageController::class, 'index']);
