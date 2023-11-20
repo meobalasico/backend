@@ -27,6 +27,19 @@ Route::controller(AuthController::class)->group(function () {
 
 });
 
+//MESSAGE APIS  
+
+Route::controller(MessageController::class)->group(function () {
+    Route::get('/message', 'index');
+    Route::get('/message/{id}', 'show');
+    Route::delete('/message/{id}', 'destroy');
+    Route::post('/message', 'store');
+    Route::put('/message/{id}', 'update');
+
+});
+
+
+
 
 // private API's
 Route::middleware(['auth:sanctum',])->group(function () {
@@ -66,9 +79,4 @@ Route::middleware(['auth:sanctum',])->group(function () {
 
 
 
-// Route::get('/message', [MessageController::class, 'index']);
-// Route::get('/message/{id}', [MessageController::class, 'show']);
-// Route::delete('/message/{id}', [MessageController::class, 'destroy']);
-// Route::post('/message', [MessageController::class, 'store']);
-// Route::put('/message/{id}', [MessageController::class, 'update']);
 
