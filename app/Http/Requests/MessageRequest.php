@@ -20,14 +20,12 @@ class MessageRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
-
-
-            'message' => 'required|string|max:255',
-            'user_id' => 'required|exists:users,id|integer',
-
+            'message' => 'required|string',
+            'user_id' => 'required|integer',
         ];
     }
+
 }

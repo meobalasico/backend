@@ -21,29 +21,32 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        if (request()->routeIs('user.login')) {
-            return
-                [
-                    "email" => 'required|string|email|max:255',
-                    "password" => 'required|min:8',
-                ];
-        } else if (request()->routeIs('user.update')) {
+        if ($this->routeIs('user.login')) {
             return [
-                "name" => 'required|string|max:255',
-
+                'email' => 'required|email|max:255',
+                'password' => 'required|min:8',
             ];
-        } else if (request()->routeIs('users.update')) {
+        } elseif ($this->routeIs('users.store')) {
             return [
-                "email" => 'required|string|email|max:255',
-
+                'name' => 'required|string|max:255',
+                'email' => 'required|email|unique:users|max:255',
+                'password' => 'required|string|min:8',
             ];
-        } else if (request()->routeIs('user.image') || request()->routeIs('profile.image')) {
+        } elseif ($this->routeIs('user.update')) {
             return [
-                "image" => 'required|image|mimes:jpg,bmp,png|max:2048',
-
+                'name' => 'required|string|max:255',
+            ];
+        } elseif ($this->routeIs('user.email')) {
+            return [
+                'email' => 'required|email|max:255',
+            ];
+        } elseif ($this->routeIs('user.image') || $this->routeIs('profile.image')) {
+            return [
+                'image' => 'required|image|mimes:jpg,bmp,png|max:2048',
             ];
         }
 
-
+        // If none of the conditions match, return an empty array
+        return [];
     }
 }

@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\CarouselItemsController;
 use App\Http\Controllers\Api\MessageController;
-use App\Http\Controllers\API\UserControl;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,20 +24,23 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('user.login');
     Route::post('/user', [UserController::class, 'store'])->name('users.store');
 
+
 });
 
 //MESSAGE APIS  
 
 Route::controller(MessageController::class)->group(function () {
-    Route::get('/message', 'index');
-    Route::get('/message/{id}', 'show');
-    Route::delete('/message/{id}', 'destroy');
-    Route::post('/message', 'store');
-    Route::put('/message/{id}', 'update');
+    Route::get('/message', [MessageController::class, 'index']);
+    Route::get('/message/{id}', [MessageController::class, 'show']);
+    Route::delete('/message/{id}', [MessageController::class, 'destroy']);
+    Route::post('/message', [MessageController::class, 'store']);
+    Route::put('/message/{id}', [MessageController::class, 'update']);
+
 
 });
 
-
+//user selection
+Route::get('/user/selection', [UserController::class, 'selection']);
 
 
 // private API's
@@ -58,12 +60,14 @@ Route::middleware(['auth:sanctum',])->group(function () {
     });
     Route::controller(UserController::class)->group(function () {
 
-        Route::get('/user', 'index');
-        Route::get('/user/{id}', 'show');
-        Route::put('/user/{id}', 'update')->name('users.update');
-        Route::put('/user/email/{id}', 'email')->name('user.email');
-        Route::put('/user/image/{id}', 'image')->name('user.image');
-        Route::delete('/user/{id}', 'destroy');
+        // UserController routes
+        Route::get('/user', [UserController::class, 'index']);
+        Route::get('/user/{id}', [UserController::class, 'show']);
+        Route::put('/user/{id}', [UserController::class, 'update'])->name('users.update');
+        Route::put('/user/email/{id}', [UserController::class, 'email'])->name('user.email');
+        Route::put('/user/image/{id}', [UserController::class, 'image'])->name('user.image');
+        Route::delete('/user/{id}', [UserController::class, 'destroy']);
+
 
     });
 

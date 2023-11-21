@@ -15,20 +15,33 @@ class MessageController extends Controller
      */
     public function index(Request $request)
     {
-        $messages = Message::select('users.name', 'messages.message', 'messages.created_at', 'messages.messages_id', 'messages.user_id')
-            ->join('users', 'messages.user_id', '=', 'users.id');
+        try {
+            $messages = Message::select('users.name', 'messages.message', 'messages.created_at', 'messages.messages_id', 'messages.user_id')
+                ->join('users', 'messages.user_id', '=', 'users.id');
 
-        if ($request->keyword) {
-            $messages->where(function ($query) use ($request) {
-                $query->where('users.name', 'ilike', '%' . $request->keyword . '%')
-                    ->orWhere('messages.message', 'ilike', '%' . $request->keyword . '%');
-            });
+            if ($request->has('keyword')) {
+                $keyword = '%' . $request->input('keyword') . '%';
+
+                $messages->where(function ($query) use ($keyword) {
+                    $query->where('users.name', 'ILIKE', $keyword)
+                        ->orWhere('messages.message', 'ILIKE', $keyword);
+                });
+            }
+
+            return $messages->get();
+        } catch (\Exception $e) {
+            // Log the exception
+            logger('Error fetching messages: ' . $e->getMessage());
+
+            // Return a more detailed response during development
+            return response()->json(['error' => 'Error fetching messages', 'message' => $e->getMessage()], 500);
         }
-
-        return $messages->get();
-        //return $messages->paginate(3);  use paginate then magbutang kag value pila ra ka book imong gusto e view.
-        // return $messages->all(); e use lang ni if walay mga filters like select,join and where.
     }
+
+
+    //return $messages->paginate(3);  use paginate then magbutang kag value pila ra ka book imong gusto e view.
+    // return $messages->all(); e use lang ni if walay mga filters like select,join and where.
+
 
 
 
@@ -36,21 +49,27 @@ class MessageController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(MessageRequest $request)
-    { {
-            $validated = $request->validated();
+    {
+        $validated = $request->validated();
 
-            $Message = Message::create($validated);
+        // Set a default user_id if not provided in the request
+        $validated['user_id'] = $validated['user_id'] ?? 1; // Replace 1 with a default user_id
 
-            return $Message;
-        }
+        $message = Message::create($validated);
+
+        return $message;
     }
 
     /**
-     * Display the specified resource.
+     * Display show of the specified resource.
      */
     public function show(string $id)
     {
-        return Message::findorFail($id);
+        // Assuming 'messages_id' is the primary key column name
+        $message = Message::findOrFail($id);
+
+        // Return the retrieved Message
+        return $message;
     }
 
 
@@ -58,15 +77,16 @@ class MessageController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(MessageRequest $request, string $id)
+    public function update(MessageRequest $request, $id)
     {
         $validated = $request->validated();
 
-        $Message = Message::findOrFail($id);
-        $Message->update($validated);
+        $message = Message::findOrFail($id);
+        $message->update($validated);
 
-        return $Message;
+        return $message;
     }
+
 
     /**
      * Remove the specified resource from storage.
