@@ -13,15 +13,11 @@ return new class extends Migration {
         Schema::create('messages', function (Blueprint $table) {
             $table->id('messages_id');
             $table->string('message');
-            $table->string('sender');
+            // $table->unsignedBigInteger('user_id'); // Add the user_id column here
             $table->timestamps();
-        });
-        Schema::table('messages', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id');
 
             $table->foreign('user_id')->references('id')->on('users');
         });
-
     }
 
     /**

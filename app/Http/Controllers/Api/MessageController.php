@@ -15,8 +15,19 @@ class MessageController extends Controller
      */
     public function index(Request $request)
     {
-        $messages = Message::select('users.name', 'messages.message', 'messages.created_at', 'messages.messages_id', 'messages.user_id', )
+        $messages = Message::select('users.name', 'messages.message', 'messages.created_at', 'messages.messages_id', 'messages.user_id')
             ->join('users', 'messages.user_id', '=', 'users.id');
+
+        if ($request->keyword) {
+            $messages->where(function ($query) use ($request) {
+                $query->where('users.name', 'ilike', '%' . $request->keyword . '%')
+                    ->orWhere('messages.message', 'ilike', '%' . $request->keyword . '%');
+            });
+        }
+
+        return $messages->get();
+        //return $messages->paginate(3);  use paginate then magbutang kag value pila ra ka book imong gusto e view.
+        // return $messages->all(); e use lang ni if walay mga filters like select,join and where.
     }
 
 

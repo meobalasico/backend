@@ -30,7 +30,6 @@ class Message extends Model
      */
     protected $fillable = [
         'message',
-        'sender',
         'user_id',
 
 

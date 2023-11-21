@@ -26,9 +26,8 @@ class MessageRequest extends FormRequest
 
 
             'message' => 'required|string|max:255',
-            'sender' => 'required|string|min:5',
-            'user_id' => 'required|string|min:5',
-            
+            'user_id' => 'required|exists:users,id|integer',
+
         ];
     }
 }
